@@ -1,21 +1,22 @@
 ul.products_ul {
   list-type: none;
-  margin-left: 20px;
+  margin-left: 10px;
   border: 1px solid #CCC;
+  border-bottom: 0;
 }
 
-.products_ul li {
-  border: 1px solid #DDD;
+ul.products_ul li {
+  border-bottom: 1px solid #DDD;
   background-color: #F9F9F9;
   list-style: none;
   margin-left: 0;
   padding: 3px;
 }
 
-.products_ul li .handle {
+ul.products_ul li .handle {
   display: inline-block;
   color: silver;
-  width: 1.5em;
-  cursor: row-resize;
+  width: 15px;
+  cursor: move;
   text-align: center;
 }

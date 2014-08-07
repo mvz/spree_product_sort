@@ -1,19 +1,19 @@
-<ul class="products_ul">
-<%
-  if taxon.id
-    products = taxon.products.available
-  else
-    products = Spree::Product.available
-  end
-  
-  #collect the pts for this taxon from each product 
-  product_taxons = products.collect {|p| p.product_taxons.where(:taxon_id => taxon.id || 0).first }
-%>
+<ul class="products_ul" id='products_ul'>
+  <%
+    if taxon.id
+      products = taxon.products.available
+    else
+      products = Spree::Product.available
+    end
 
-<% product_taxons.compact.each do |pt| %>
-  <li id="product_taxons_<%=pt.id%>">
-   <span class="handle">≡</span>
-   <%= h pt.product.name %>
-  </li>
-<% end %>
+    #collect the pts for this taxon from each product
+    product_taxons = products.collect {|p| p.product_taxons.where(:taxon_id => taxon.id || 0).first }
+  %>
+
+  <% product_taxons.compact.each do |pt| %>
+    <li id="product_taxons_<%=pt.id%>">
+     <span class="handle">≡</span>
+     <%= h pt.product.name %>
+    </li>
+  <% end %>
 </ul>

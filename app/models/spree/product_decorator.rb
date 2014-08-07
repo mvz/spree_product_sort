@@ -4,12 +4,6 @@ Spree::Product.class_eval do
 
   scope :ordered, -> { includes(:product_taxons).order('spree_product_taxons.position') }
 
-  scope :available, lambda { |*args| 
-    where(["spree_products.available_on <= ?", args.first || Time.zone.now]).
-      includes(:product_taxons).
-      order('spree_product_taxons.taxon_id, spree_product_taxons.position') #group positions by taxon so that home page (0) works
-  }
-
   after_create :create_product_taxon
 
   def create_product_taxon
@@ -28,6 +22,22 @@ Spree::Product.class_eval do
       else
         false
     end
+  end
+
+  # Can't use add_search_scope for this as it needs a default argument
+  def self.available(available_on = nil, currency = nil)
+    scope = joins(:master => :prices).where("#{Spree::Product.quoted_table_name}.available_on <= ?", available_on || Time.now)
+    unless Spree::Config.show_products_without_price
+      scope = scope.where('spree_prices.currency' => currency || Spree::Config[:currency]).where('spree_prices.amount IS NOT NULL')
+    end
+    scope = scope.includes(:product_taxons).order('spree_product_taxons.taxon_id, spree_product_taxons.position')
+  end
+  search_scopes << :available
+
+  add_search_scope :in_taxon do |taxon|
+    select("DISTINCT(spree_products.id), spree_products.*, spree_product_taxons.taxon_id, spree_product_taxons.position").
+    joins(:taxons).
+    where(Spree::Taxon.table_name => { :id => taxon.self_and_descendants.pluck(:id) })
   end
 
 end
