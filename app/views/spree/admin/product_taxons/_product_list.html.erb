@@ -1,7 +1,7 @@
 <ul class="products_ul" id='products_ul'>
   <%
     if taxon.id
-      products = taxon.products.available
+      products = taxon.products.available.active
     else
       products = Spree::Product.available
     end

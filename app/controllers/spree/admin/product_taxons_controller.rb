@@ -7,7 +7,7 @@ module Spree
         end
         # List of taxons, beginnning with a virtual taxons for Home, and then all taxons with pts
         @taxons = []
-        @taxons |= Spree::Taxon.order(:name)
+        @taxons |= Spree::Taxon.includes(:translations).order(:name)
       end
     end
   end
