@@ -1,6 +1,6 @@
 <h1><%= t(:positions_for_products_in_taxons) %></h1>
 <%= form_tag("/admin/product_taxons/positions", method: "get") do %>
-  <%= select_tag(:custom_taxon_id, options_from_collection_for_select(@taxons, :id, :permalink, params[:taxon_id]), class: 'select2') %>
+  <%= select_tag(:custom_taxon_id, options_from_collection_for_select(@taxons, :id, :permalink, params[:custum_taxon_id]), class: 'select2') %>
   <%= submit_tag("Select", class: 'btn btn-primary') %>
 <% end %>
 <% if params[:custom_taxon_id].present? %>
