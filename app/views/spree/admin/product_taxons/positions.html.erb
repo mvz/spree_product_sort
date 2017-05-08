@@ -3,28 +3,9 @@
   <%= select_tag(:custom_taxon_id, options_from_collection_for_select(@taxons, :id, :permalink, params[:custum_taxon_id]), class: 'select2') %>
   <%= submit_tag("Select", class: 'btn btn-primary') %>
 <% end %>
+
 <% if params[:custom_taxon_id].present? %>
   <br/>
   <h2><%= "#{@taxon.name} (#{@taxon.permalink})" %></h2>
   <%= render :partial=> 'product_list', :locals => {:taxon => @taxon} %>
-
-  <% content_for :head do %>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('ul#products').sortable(
-          { items:'li',
-            handle:'.handle'
-          }
-        );
-        $('#update-positions').on('click', function(e) {
-          $.post('/admin/taxons/reorder_products/<%= @taxon.id || 0 %>',
-                 '_method=put&'+$('ul#products').sortable('serialize'));
-          e.preventDefault();
-        });
-      });
-    </script>
-  <% end %>
-  <div class="col-sm-12">
-    <%= link_to 'Update positions', '#', id: 'update-positions', class: 'btn btn-primary' %>
-  </div>
 <% end %>

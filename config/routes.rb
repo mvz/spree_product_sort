@@ -1,11 +1,12 @@
 Spree::Core::Engine.append_routes do
 
   namespace :admin do
-		# callback for jQuery sort action
-    put 'taxons/reorder_products/:id' => 'taxons#reorder_products'
-    get 'product_taxons/positions' => 'product_taxons#positions', :as => :product_sort
+
+    get 'product_taxons/positions' => 'product_taxons#positions', as: :product_sort
+
     resources :product_taxons do
       collection do
+        post :update_positions
         get :positions
       end
     end
