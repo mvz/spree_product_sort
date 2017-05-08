@@ -6,7 +6,7 @@
   end
 
   #collect the pts for this taxon from each product
-  product_taxons = products.collect {|p| p.product_taxons.where(:taxon_id => taxon.id || 0).first }
+  product_taxons = products.collect {|p| p.product_taxons.where(taxon_id: taxon.id || 0).first }
 %>
 
 <table class="table sortable" id='listing_taxon_products' data-hook data-sortable-link="<%= update_positions_admin_product_taxons_url %>">

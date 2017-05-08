@@ -21,7 +21,7 @@ if File.exists?(gemfile) && (%w(spec cucumber).include?(ARGV.first.to_s) || ARGV
 end
 
 desc "Default Task"
-task :default => [:spec, :cucumber ]
+task default: [:spec, :cucumber ]
 
 spec = eval(File.read('spree_product_sort.gemspec'))
 
@@ -30,14 +30,14 @@ Rake::GemPackageTask.new(spec) do |p|
 end
 
 desc "Release to gemcutter"
-task :release => :package do
+task release: :package do
   require 'rake/gemcutter'
   Rake::Gemcutter::Tasks.new(spec).define
   Rake::Task['gem:push'].invoke
 end
 
 desc "Default Task"
-task :default => [ :spec ]
+task default: [ :spec ]
 
 desc "Regenerates a rails 3 app for testing"
 task :test_app do
@@ -58,8 +58,8 @@ task :test_app do
     protected
     def full_path_for_local_gems
       <<-gems
-gem 'spree_core', :path => \'#{File.join(File.dirname(__FILE__), "../spree/", "core")}\'
-gem 'spree_product_sort', :path => \'#{File.dirname(__FILE__)}\'
+gem 'spree_core', path: \'#{File.join(File.dirname(__FILE__), "../spree/", "core")}\'
+gem 'spree_product_sort', path: \'#{File.dirname(__FILE__)}\'
       gems
     end
 

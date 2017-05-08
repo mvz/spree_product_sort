@@ -7,5 +7,5 @@
 <% if params[:custom_taxon_id].present? %>
   <br/>
   <h2><%= "#{@taxon.name} (#{@taxon.permalink})" %></h2>
-  <%= render :partial=> 'product_list', :locals => {:taxon => @taxon} %>
+  <%= render partial: 'product_list', locals: {taxon: @taxon} %>
 <% end %>

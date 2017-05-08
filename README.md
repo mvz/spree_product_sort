@@ -11,17 +11,20 @@ Based on: [https://github.com/jdevine/spree-ordering-in-taxons](https://github.c
 
 ### Installation
 
-Add gem 
+Add the following to your Gemfile
 
-    gem 'spree_product_sort', :git => 'https://github.com/oxpeck/spree_product_sort.git'
-    bundle install
+```
+  gem 'spree_product_sort',     github: '5-stones/spree_product_sort',          branch: '3-0-stable'
+```
 
-Use branch '1-2-stable' for Spree 1-2-stable versions.
+Then run `bundle install`
 
 Add Migration and assets
 
-    rails g spree_product_sort:install
+```
+  rails g spree_product_sort:install
+```
 
 ### Known Issues
 
-- it will break spree's sample_data import 
+- it will break spree's sample_data import
