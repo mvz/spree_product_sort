@@ -2,8 +2,7 @@ Spree::Product.class_eval do
   has_many :product_taxons
   has_many :taxons, :through=>:product_taxons
 
-  #default_scope :include=>:product_taxons, :order=>"product_taxons.position"
-  scope :ordered, {:include=>:product_taxons, :order=>"spree_product_taxons.position"}
+  scope :ordered, -> { includes(:product_taxons).order('spree_product_taxons.position') }
 
   after_create :create_product_taxon
 

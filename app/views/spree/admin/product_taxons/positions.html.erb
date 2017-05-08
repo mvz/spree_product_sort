@@ -1,36 +1,11 @@
-<%= render :partial => 'spree/admin/shared/product_sub_menu' %>
 <h1><%= t(:positions_for_products_in_taxons) %></h1>
 <%= form_tag("/admin/product_taxons/positions", method: "get") do %>
-  <%= select_tag(:taxon_id, options_from_collection_for_select(@taxons, :id, :permalink, params[:taxon_id])) %>
-  <%= submit_tag("Select") %>
+  <%= select_tag(:custom_taxon_id, options_from_collection_for_select(@taxons, :id, :permalink, params[:custum_taxon_id]), class: 'select2') %>
+  <%= submit_tag("Select", class: 'btn btn-primary') %>
 <% end %>
-<% if params[:taxon_id].present? %>
+
+<% if params[:custom_taxon_id].present? %>
   <br/>
   <h2><%= "#{@taxon.name} (#{@taxon.permalink})" %></h2>
   <%= render :partial=> 'product_list', :locals => {:taxon => @taxon} %>
-
-  <% content_for :head do %>
-    <script type="text/javascript">
-      jQuery(document).ready(function(){
-        $('ul#products_ul').sortable(
-          { items:'li',
-            containment:'parent',
-            axis:'y',
-            handle:'.handle'
-          }
-        );
-        $('#update-positions').on('click', function() {
-          $.post('/admin/taxons/reorder_products/<%= @taxon.id || 0 %>',
-                 '_method=put&'+$('ul#products_ul').sortable('serialize'));
-        });
-      });
-
-    </script>
-  <% end %>
-
-  <%= link_to 'Update positions', '#', id: 'update-positions', class: 'button' %>
 <% end %>
-
-<script type="text/javascript">
-    $('#taxon_id').select2();
-</script>

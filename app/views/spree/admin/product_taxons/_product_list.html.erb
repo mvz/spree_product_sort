@@ -1,19 +1,31 @@
-<ul class="products_ul" id='products_ul'>
-  <%
-    if taxon.id
-      products = taxon.products.available
-    else
-      products = Spree::Product.available
-    end
+<%
+  if taxon.id
+    products = taxon.products.available.active.includes(master: :images)
+  else
+    products = Spree::Product.available.includes(:images)
+  end
 
-    #collect the pts for this taxon from each product
-    product_taxons = products.collect {|p| p.product_taxons.where(:taxon_id => taxon.id || 0).first }
-  %>
+  #collect the pts for this taxon from each product
+  product_taxons = products.collect {|p| p.product_taxons.where(:taxon_id => taxon.id || 0).first }
+%>
 
-  <% product_taxons.compact.each do |pt| %>
-    <li id="product_taxons_<%=pt.id%>">
-     <span class="handle">≡</span>
-     <%= h pt.product.name %>
-    </li>
-  <% end %>
-</ul>
+<table class="table sortable" id='listing_taxon_products' data-hook data-sortable-link="<%= update_positions_admin_product_taxons_url %>">
+  <thead>
+    <tr data-hook="taxonomies_header">
+      <th class="no-border"></th>
+      <th colspan="2"><%= Spree.t(:product) %></th>
+      <th class="actions"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% product_taxons.compact.each do |pt| %>
+      <tr id="spree_product_taxon_<%=pt.id%>" data-hook="products_row">
+        <td class="move-handle">
+          <span class="icon icon-sort handle"></span>
+        </td>
+        <td><%= mini_image pt.product %></td>
+        <td><%= pt.product.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
