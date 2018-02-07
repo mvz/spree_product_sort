@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'rake'
 require 'rake/testtask'
@@ -5,7 +7,7 @@ require 'rake/packagetask'
 require 'rake/gempackagetask'
 
 gemfile = File.expand_path('../spec/test_app/Gemfile', __FILE__)
-if File.exists?(gemfile) && (%w(spec cucumber).include?(ARGV.first.to_s) || ARGV.size == 0)
+if File.exist?(gemfile) && (%w[spec cucumber].include?(ARGV.first.to_s) || ARGV.empty?)
   require 'bundler'
   ENV['BUNDLE_GEMFILE'] = gemfile
   Bundler.setup
@@ -16,12 +18,12 @@ if File.exists?(gemfile) && (%w(spec cucumber).include?(ARGV.first.to_s) || ARGV
 
   require 'cucumber/rake/task'
   Cucumber::Rake::Task.new do |t|
-    t.cucumber_opts = %w{--format progress}
+    t.cucumber_opts = %w[--format progress]
   end
 end
 
-desc "Default Task"
-task default: [:spec, :cucumber ]
+desc 'Default Task'
+task default: %i[spec cucumber]
 
 spec = eval(File.read('spree_product_sort.gemspec'))
 
@@ -29,23 +31,22 @@ Rake::GemPackageTask.new(spec) do |p|
   p.gem_spec = spec
 end
 
-desc "Release to gemcutter"
+desc 'Release to gemcutter'
 task release: :package do
   require 'rake/gemcutter'
   Rake::Gemcutter::Tasks.new(spec).define
   Rake::Task['gem:push'].invoke
 end
 
-desc "Default Task"
-task default: [ :spec ]
+desc 'Default Task'
+task default: [:spec]
 
-desc "Regenerates a rails 3 app for testing"
+desc 'Regenerates a rails 3 app for testing'
 task :test_app do
   require '../spree/lib/generators/spree/test_app_generator'
   class SpreeProductSortTestAppGenerator < Spree::Generators::TestAppGenerator
-
     def install_gems
-      inside "test_app" do
+      inside 'test_app' do
         run 'rake spree_core:install'
         run 'rake spree_product_sort:install'
       end
@@ -56,13 +57,13 @@ task :test_app do
     end
 
     protected
+
     def full_path_for_local_gems
-      <<-gems
-gem 'spree_core', path: \'#{File.join(File.dirname(__FILE__), "../spree/", "core")}\'
-gem 'spree_product_sort', path: \'#{File.dirname(__FILE__)}\'
+      <<~gems
+        gem 'spree_core', path: \'#{File.join(File.dirname(__FILE__), '../spree/', 'core')}\'
+        gem 'spree_product_sort', path: \'#{File.dirname(__FILE__)}\'
       gems
     end
-
   end
   SpreeProductSortTestAppGenerator.start
 end
@@ -70,6 +71,6 @@ end
 namespace :test_app do
   desc 'Rebuild test and cucumber databases'
   task :rebuild_dbs do
-    system("cd spec/test_app && rake db:drop db:migrate RAILS_ENV=test && rake db:drop db:migrate RAILS_ENV=cucumber")
+    system('cd spec/test_app && rake db:drop db:migrate RAILS_ENV=test && rake db:drop db:migrate RAILS_ENV=cucumber')
   end
 end

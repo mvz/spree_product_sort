@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_product_sort'
@@ -9,7 +11,7 @@ Gem::Specification.new do |s|
   s.author            = 'Andrew Hooker and Friends'
   s.email             = 'adhlssu07@gmail.com'
   s.homepage          = 'http://www.spreecommerce.com'
-   
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_path = 'lib'
