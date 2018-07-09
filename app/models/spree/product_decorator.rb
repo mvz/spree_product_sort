@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Spree::Product.class_eval do
   has_many :product_taxons
   has_many :taxons, through: :product_taxons
@@ -10,19 +8,19 @@ Spree::Product.class_eval do
 
   def create_product_taxon
     # new product added, create initial product_taxon assignment so that products on the main page can also be sorted.
-    Spree::ProductTaxon.create(product_id: id, taxon_id: 0)
+    Spree::ProductTaxon.create(product_id: self.id, taxon_id: 0)
   end
 
   def in_taxon?(taxon)
     case taxon
-    when String
-      taxons.map { |t| [t.name.downcase, t.permalink.downcase] }.flatten.include?(taxon.strip.downcase)
-    when Integer
-      taxons.map(&:id).include?(taxon)
-    when Taxon
-      taxons.include?(taxon)
-    else
-      false
+      when String
+        self.taxons.map{|t| [t.name.downcase,t.permalink.downcase]}.flatten.include?(taxon.strip.downcase)
+      when Integer
+        self.taxons.map{|t| t.id}.include?(taxon)
+      when Taxon
+        self.taxons.include?(taxon)
+      else
+        false
     end
   end
 
@@ -37,8 +35,9 @@ Spree::Product.class_eval do
   search_scopes << :available
 
   add_search_scope :in_taxon do |taxon|
-    select('DISTINCT(spree_products.id), spree_products.*, spree_product_taxons.taxon_id, spree_product_taxons.position')
-      .joins(:taxons)
-      .where(Spree::Taxon.table_name => { id: taxon.self_and_descendants.pluck(:id) })
+    select("DISTINCT(spree_products.id), spree_products.*, spree_product_taxons.taxon_id, spree_product_taxons.position").
+    joins(:taxons).
+    where(Spree::Taxon.table_name => { id: taxon.self_and_descendants.pluck(:id) })
   end
+
 end

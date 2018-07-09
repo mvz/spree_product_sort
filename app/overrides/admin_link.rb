@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Deface::Override.new(virtual_path: 'spree/admin/shared/sub_menu/_product',
                      name: 'admin_product_sort',
                      insert_bottom: "[data-hook='admin_product_sub_tabs']",
